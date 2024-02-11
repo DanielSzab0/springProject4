@@ -9,44 +9,56 @@ import com.example.springproject4.repository.RoleRepository;
 import com.example.springproject4.repository.UserRepository;
 import com.example.springproject4.service.CustomServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-@RequiredArgsConstructor
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class AdminUserCommandLineRunner implements CommandLineRunner {
+
 
     private final CustomServiceImpl customServiceImpl;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
+
+    @Autowired
+    public AdminUserCommandLineRunner(CustomServiceImpl customServiceImpl, RoleRepository roleRepository, UserRepository userRepository) {
+        this.customServiceImpl = customServiceImpl;
+        this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public void run(String... args) {
         Optional<Role> optionalRole = roleRepository.findRoleByName("SUPERADMIN");
 
 
+
         RoleRequest roleRequest = new RoleRequest();
+
 
 
         if (optionalRole.isEmpty()) {
 
             roleRequest.setRoleName("SUPERADMIN");
 
-
             Role role = customServiceImpl.addRole(roleRequest);
-
 
             addRoleToUser(customServiceImpl, role.getId());
 
         }
 
-
         Optional<User> optionalUser = userRepository.findUserByName("super_admin");
 
 
+
         if (optionalUser.isEmpty()) {
+
 
             UserRequest userRequest = new UserRequest();
 
@@ -62,7 +74,9 @@ public class AdminUserCommandLineRunner implements CommandLineRunner {
             userRequest.setMobile("0722245643");
 
 
+
             User user = customServiceImpl.addUser(userRequest);
+
 
 
             customServiceImpl.addRoleToUser(new AddRoleToUserRequest(user.getName(), "SUPERADMIN"));
@@ -72,11 +86,11 @@ public class AdminUserCommandLineRunner implements CommandLineRunner {
 
         }
 
+
     }
 
 
     private void addRoleToUser(CustomServiceImpl customServiceImpl, Integer roleId) {
-
         customServiceImpl.addRoleToUser(new AddRoleToUserRequest("super_admin", roleId.toString()));
 
     }

@@ -23,7 +23,10 @@ import com.example.springproject4.repository.ProductRepository;
 import com.example.springproject4.repository.RoleRepository;
 import com.example.springproject4.repository.UserRepository;
 import com.example.springproject4.service.security.UserDetailsImpl;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +36,6 @@ import java.util.Optional;
 
 @Service
 public class CustomServiceImpl implements CustomService{
-
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -225,7 +227,7 @@ public class CustomServiceImpl implements CustomService{
             User user = userOptional.get();
             Role role = roleOptional.get();
 
-            user.addRole(role);
+            user.getRoles().add(role);
             userRepository.save(user);
         }
     }
