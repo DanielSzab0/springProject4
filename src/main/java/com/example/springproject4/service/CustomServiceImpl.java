@@ -23,8 +23,8 @@ import com.example.springproject4.repository.ProductRepository;
 import com.example.springproject4.repository.RoleRepository;
 import com.example.springproject4.repository.UserRepository;
 import com.example.springproject4.service.security.UserDetailsImpl;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
@@ -52,10 +52,11 @@ public class CustomServiceImpl implements CustomService{
     }
 
     @Override
-    public void addUser(UserRequest userRequest) {
+    public User addUser(UserRequest userRequest) {
 
         User user = UserMapper.fromUserRequest(userRequest);
         userRepository.save(user);
+        return user;
     }
 
     @Override
@@ -194,9 +195,10 @@ public class CustomServiceImpl implements CustomService{
     }
 
     @Override
-    public void addRole(RoleRequest roleRequest) {
+    public Role addRole(RoleRequest roleRequest) {
         Role role = RoleMapper.fromRoleRequest(roleRequest);
                 roleRepository.save(role);
+                return role;
     }
 
     @Override
@@ -204,6 +206,7 @@ public class CustomServiceImpl implements CustomService{
         Optional<Role> optionalRole = roleRepository.findById(id);
         if (optionalRole.isPresent()) {
             Role role = optionalRole.get();
+            Hibernate.initialize(role.getUsers());
             return RoleMapper.fromRole(role);
         } else {
             throw new RuntimeException("No role found");

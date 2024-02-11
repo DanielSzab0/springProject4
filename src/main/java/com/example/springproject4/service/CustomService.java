@@ -10,6 +10,8 @@ import com.example.springproject4.dto.request.user.UserRequest;
 import com.example.springproject4.dto.response.product.ProductResponse;
 import com.example.springproject4.dto.response.user.RoleResponse;
 import com.example.springproject4.dto.response.user.UserResponse;
+import com.example.springproject4.entity.Role;
+import com.example.springproject4.entity.User;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.List;
 public interface CustomService {
 
     void addProduct(ProductRequest product);
-    void addUser(UserRequest user);
+    User addUser(UserRequest user);
 
     UserResponse getUser(Integer id);
 
@@ -40,7 +42,7 @@ public interface CustomService {
 
     void editProduct(EditProductRequest editProductRequest, Integer id);
 
-    void addRole(RoleRequest roleRequest);
+    Role addRole(RoleRequest roleRequest);
 
     RoleResponse getRole(Integer id);
 

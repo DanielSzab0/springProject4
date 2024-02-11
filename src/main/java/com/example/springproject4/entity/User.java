@@ -25,7 +25,7 @@ public class User {
     private Integer age;
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER) //fetchType LAZY este DEFAULT
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER) //fetchType LAZY este DEFAULT
     @JoinTable(name = "users_roles",
             joinColumns = {@JoinColumn (name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
